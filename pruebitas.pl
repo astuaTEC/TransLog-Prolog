@@ -7,7 +7,7 @@ grmáticas libres de contexto
 */
 
 
-:- include(sustantivosSingulares).
+%:- include(sustantivosSingulares).
 %:- include(adjetivos).
 
 texto :-
@@ -50,17 +50,19 @@ concatenar(A,B,C,D,Z)     :- concatenar(A,B,X), concatenar(X,C,Y), concatenar(Y,
 oracion(A, B) :- oracion_simple(A, B).
 oracion(A, B) :- oracion_simple(X, XX), conjuncion(Y, YY), concatenar(X,Y, Z), concatenar(XX,YY, ZZ), 
                  concatenar(Z, V, A), concatenar(ZZ, VV, B), oracion(V,VV),
-                 concatenar(Z, V, A), concatenar(ZZ, VV, B).     
+                 concatenar(Z, V, A), concatenar(ZZ, VV, B).   
+
+oracion(A, B) :- oracion_simple(X, XX), preposicion(Y, YY), concatenar(X,Y, Z), concatenar(XX,YY, ZZ), 
+                 concatenar(Z, V, A), concatenar(ZZ, VV, B), oracion(V,VV),
+                 concatenar(Z, V, A), concatenar(ZZ, VV, B).                
 
 oracion_simple(A, B) :- palabra(A, B).
+oracion_simple(A, B) :- sintagma_nominal(A, B, Persona).
 oracion_simple(A, B) :- sintagma_nominal(X, XX, Persona), sintagma_verbal(Y, YY, Persona), concatenar(X, Y, A), 
                         concatenar(XX, YY, B).
 oracion_simple(A, B) :- interrogativo(X, XX), sintagma_verbal(Y, YY, Persona), concatenar(X, Y, A), 
                         concatenar(XX, YY, B).
 
-/*oracion(A, B) :- sintagma_nominal(X, XX, Persona), sintagma_verbal(Y, YY, Persona), 
-                 sintagma_nominal(Z, ZZ), concatenar(X, Y, Z, A), 
-                 concatenar(XX, YY, ZZ, B).*/
 
 
 sintagma_verbal(L1, L2, Persona) :- verbo(Numero, Tiempo, Persona, L1, L2).
@@ -70,6 +72,8 @@ sintagma_verbal(L1, L2, Persona) :- verbo(Numero, Tiempo, Persona, X, XX), sinta
 
 sintagma_nominal(L1, L2, Persona) :- sustantivo(Numero, Genero, L1, L2).
 sintagma_nominal(L1, L2, Persona) :- pronombre(Numero, Persona, L1, L2).
+sintagma_nominal(L1, L2, Persona) :- adjetivo(Numero, Genero, L1, L2).
+
 /*sintagma_nominal(L1, L2, Persona) :- determinante(Numero, Genero, Persona, X, XX), 
                                        adjetivo(Numero, Genero, Y, YY), sintagma_nominal(Z, ZZ, Persona),
                                        concatenar(X,Y,Z, L1), concatenar(XX,YY,ZZ,L2).
@@ -86,33 +90,44 @@ sintagma_nominal(L1, L2, Persona) :- determinante(Numero, Genero, Persona, X, XX
                                      sustantivo(Numero, Genero, Y, YY),
                                      concatenar(X, Y, L1), concatenar(XX, YY, L2).
 
-/*sintagma_nominal(L1, L2) :- conjuncion(X, XX), oracion(Y, YY),
-                            concatenar(X, Y, L1), concatenar(XX, YY, L2), !.*/
-/*sintagma_nominal() :- determinante(), sintagma_nominal().
-sintagma_nominal() :- adjetivo(), adverbio().
+sintagma_nominal(L1, L2, Persona) :- sustantivo(Numero, Genero, X, XX), adjetivo(Numero, Genero, Y, YY),
+                                     concatenar(X, Y, L1), concatenar(XX, YY, L2).
+
+sintagma_nominal(L1, L2, Persona) :- determinante(Numero, Genero, Persona, X, XX),
+                                     adjetivo(Numero, Genero, Y, YY), sustantivo(Numero, Genero, Z, ZZ), 
+                                     concatenar(X, Y, Z, L1), concatenar(XX, YY, ZZ, L2).
+
+sintagma_nominal(L1, L2, Persona) :- adjetivo(Numero, Genero, X, XX), adverbio(Y, YY), 
+                                     concatenar(X, Y, L1), concatenar(XX, YY, L2).
+
+/*sintagma_nominal() :- adjetivo(), adverbio().
 sintagma_nominal(L1, L2) :- adverbio(), adjetivo().*/
 
-%sintagma_nominal(L1, L2) :- adjetivo().
 
+sustantivo(plural, masculino, ["lenguajes"], ["lenguages"]).
+sustantivo(singular, _, ["programacion"], ["programming"]).
+sustantivo(singular, masculino, ["Prolog"], ["Prolog"]).
+sustantivo(singular, masculino, ["uno"], ["one"]).
+sustantivo(singular, _, ["eso"], ["It"]).
 
-vacio([], []).
-
- 
 palabra(["Hola"], ["Hello"]).
 
-verbo(singular, presente, segunda, ["es"], ["are"]).
-verbo(singular, presente, segunda, ["esta"], ["are"]).
-verbo(singular, presente, segunda, ["estas"], ["are"]).
 verbo(singular, presente, tercera, ["es"],["is"]).
+verbo(singular, presente, segunda, ["esta"], ["are"]).
+verbo(singular, presente, segunda, ["es"], ["are"]).
+verbo(singular, presente, segunda, ["estas"], ["are"]).
 verbo(plural, presente, tercera, ["son"],["are"]).
 verbo(plural, presente, primera, ["somos"],["are"]).
 
 verbo(singular, presente, tercera, ["come"], ["eats"]).
 verbo(singular, presente, primera, ["como"], ["eat"]).
+verbo(_, presente, _, ["siguesiendo"], ["remains"]).
 
 
 
 adverbio(["comunmente"], ["commonly"]).
+adverbio(["hoy"], ["today"]).
+
 
 
 preposicion(["de"], ["of"]).
@@ -133,6 +148,7 @@ interrogativo(["Cuantos"], ["How many"]).
 interrogativo(["Con qué frecuencia"], ["How often"]).
 interrogativo(["De quién"], ["Whose"]).
 
+pronombre(singular,primera,["me"], ["I"]).
 pronombre(singular,primera,["yo"], ["I"]).
 pronombre(singular,segunda,["usted"], ["you"]).
 pronombre(singular,segunda,["tu"], ["you"]).
@@ -146,7 +162,16 @@ pronombre(plural,tercera,["ellas"], ["they"]).
 
 determinante(singular, masculino, tercera, ["el"], ["the"]).
 determinante(singular, femenino, tercera, ["la"], ["the"]).
+determinante(plural, masculino, tercera, ["los"], ["the"]).
 
 
 conjuncion(["y"], ["and"]).
 conjuncion(["o"], ["or"]).
+
+adjetivo(singular,masculino,["rojo"],["red"]).
+adjetivo(singular,femenino,["roja"],["red"]).
+adjetivo(singular,_,["grande"],["big"]).
+adjetivo(plural, masculino, ["primeros"], ["first"]).
+adjetivo(singular, femenino, ["logica"], ["logic"]).
+adjetivo(singular, _, ["popular"], ["popular"]).
+
