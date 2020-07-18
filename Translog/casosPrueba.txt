@@ -1,0 +1,48 @@
+
+
+En español:
+
+Excepciones:
+
+"el carro rojo".
+"Hola !".
+"Coomo estaas tuu ?".
+"Cuaantos_anios tienes tuu ?".
+
+
+Oraciones:
+
+"Prolog es uno de los primeros lenjuajes de programacioon loogica y eso siguesiendo popular hoy".
+
+"el hombre come la manzana y la mujer come la naranja".
+
+"el hombre es grande".
+
+"el carro rojo es raapido".
+
+"el carro rojo corre raapido".
+
+"el hombre piensa raapido".
+
+------------------------------------------------------------------------------------------------
+
+En ingles:
+
+"the red car".
+"Hello !".
+"How are you ?".
+"How_old are you ?".   --> se  comporta raro
+
+Oraciones:
+
+"Prolog is one of the first lenguages of logic programming and It remains popular today".
+
+"the man eats the apple and the woman eats the orange".
+
+"the man is big".
+
+"the red car is fast".
+
+"the red car runs fast".
+
+"the man thinks fast".
