@@ -9,14 +9,6 @@ Instituto Tecnológico de Costa Rica | CE3104 - Lenguajes, Compiladores e Interp
 */
 
 
-/*sustantivo(singular, masculino, ["yo"], ["I"]).
-sustantivo(singular, _, ["usted"], ["You"]).
-sustantivo(singular, _, ["tú"], ["You"]).
-sustantivo(singular, masculino, ["él"], ["He"]).
-sustantivo(singular, femenino, ["ella"], ["She"]).
-sustantivo(singular, _, ["lo"], ["It"]).
-sustantivo(singular, _, ["eso"], ["It"]).
-sustantivo(singular, _, ["se"], ["It"]).*/
 sustantivo(singular, masculino, ["Prolog"], ["Prolog"]).
 sustantivo(singular, masculino, ["uno"], ["one"]).
 sustantivo(singular, masculino, ["sistema"], ["system"]).
